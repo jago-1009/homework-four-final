@@ -25,6 +25,7 @@ export default function Home() {
             id={item.id}
             favoriteStyle={pokeData.favoriteStyle[item.id]}
             onClick={() => {pokeData.toggleFavorite(item)}}
+            toggleRedirect={() => {pokeData.toggleRedirect(item.id)}}
           />
         );
     }) 

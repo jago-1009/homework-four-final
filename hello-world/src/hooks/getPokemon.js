@@ -100,6 +100,9 @@ async function getPokemon(number) {
   }
   
 }
+async function toggleRedirect(id) {
+  window.location.href="/details?id=" + id
+}
 async function getRandomPokemon(limit = 5) {
     if (!pokemonState.totalPokemonCount) return [];
     const pokemonIds = {};
@@ -126,8 +129,11 @@ async function getRandomPokemon(limit = 5) {
       randomPokemon: Object.values(pokemonIds),
     });
   }
+  function capitalizeFirstLetter(val) {
+    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+}
   // modified
-  const contextValue = { ...pokemonState, getNumberOfPokemon, getRandomPokemon, searchPokemon, addtoFavorite, toggleFavorite, arrayToString };
+  const contextValue = { ...pokemonState, getNumberOfPokemon, getRandomPokemon, searchPokemon, addtoFavorite, toggleFavorite, arrayToString, toggleRedirect, getPokemon, capitalizeFirstLetter };
 
   return (
     <PokemonContext.Provider value={contextValue}>

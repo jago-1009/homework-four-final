@@ -1,8 +1,8 @@
+'use client'
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { PokemonProvider } from "../hooks/getPokemon";
-
+import usePokemonApi from "@/hooks/getPokemon";
 
 export default function Details() {
     const [data, setData] = useState({});
@@ -11,5 +11,22 @@ export default function Details() {
     const id = searchParams.get("id");
     const name = searchParams.get("name");
     const pokeData = usePokemonApi();
+    useEffect(() => {
+        grabPokemon(id)
 
+    },[])
+    async function grabPokemon(id) {
+        const request = await pokeData.getPokemon(id)
+        .then((response) => {
+            console.log(response)
+            setData(response)
+        })
+      return []
+        }
+    return (
+        <main>
+            <h1>{data.name}</h1>
+        </main>
+    )    
+}
     

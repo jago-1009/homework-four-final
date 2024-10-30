@@ -17,7 +17,7 @@ export default function Pokemon() {
     }, [query]);
     function loadCard(data) {
       setCard(<Card name={data.name} types={pokeData.arrayToString(data.types)} sprite={data.sprites.front_default}
-      id={data.id} favoriteStyle={data.favoriteStyle} onClick={() => pokeData.toggleFavorite(data)}/>)
+      id={data.id} favoriteStyle={data.favoriteStyle} onClick={() => pokeData.toggleFavorite(data)} toggleRedirect={() => {pokeData.toggleRedirect(item.id)}}/>)
     }
     return (
         <div className={pokeStyles.container}>
