@@ -11,7 +11,22 @@ export function PokemonProvider({ children }) {
     favoritePokemon: [],
     favoriteStyle: [],
   });
-
+  function arrayToString(array) {
+    let string = "";
+    if (array !== undefined) {
+      array.map((item, index, elements) => {
+        if (elements[index + 1] !== undefined) {
+          string += (item.type.name + ", ");
+        }
+        else {
+          string += (item.type.name)
+        }
+       
+      })
+    }
+    return string;
+    
+  }
 
   function toggleFavorite(pokemon) {
     const newStyle = { ...pokemonState.favoriteStyle };
@@ -20,7 +35,7 @@ export function PokemonProvider({ children }) {
     if (pokemonState.favoriteStyle[pokemon.id] === "#d3d3d3") {
         // Remove from favorites and update style to black
         newStyle[pokemon.id] = 'black';
-        newFavorite = updatedFavoritePokemon.filter((item) => item.id !== pokemon.id);
+        newFavorite = newFavorite.filter((item) => item.id !== pokemon.id);
     } else {
         // Add to favorites and update style to #d3d3d3
         newStyle[pokemon.id] = '#d3d3d3';
@@ -42,14 +57,7 @@ export function PokemonProvider({ children }) {
       favoritePokemon: [...pokemonState.favoritePokemon, pokemon],
     })
   }
-  function removeFavorite(pokemon) {
-    setPokemonState({
-      ...pokemonState,
-      favoritePokemon: pokemonState.favoritePokemon.filter(
-        (item) => item.id !== pokemon.id
-      ),
-    })
-  }
+  
   async function searchPokemon(name) {
     const pokeRequest = await fetch(
       `https://pokeapi.co/api/v2/pokemon/${name}`
@@ -72,6 +80,9 @@ export function PokemonProvider({ children }) {
   /**
  * Get 5 random unique ids to fetch pokemon
  **/
+
+  //I'm aware that this is redundant, but before the update I used it to recursively call the function until data was called.
+  //I'm leaving it here because I'm proud of it.
 async function getPokemon(number) {
   const randId = parseInt(Math.random() * pokemonState.totalPokemonCount) + 1;
   const pokeRequest = await fetch(
@@ -116,7 +127,7 @@ async function getRandomPokemon(limit = 5) {
     });
   }
   // modified
-  const contextValue = { ...pokemonState, getNumberOfPokemon, getRandomPokemon, searchPokemon, addtoFavorite, toggleFavorite };
+  const contextValue = { ...pokemonState, getNumberOfPokemon, getRandomPokemon, searchPokemon, addtoFavorite, toggleFavorite, arrayToString };
 
   return (
     <PokemonContext.Provider value={contextValue}>
