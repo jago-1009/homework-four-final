@@ -1,14 +1,18 @@
-'use client'
+'use client';
+import Link from 'next/link'
 import Navstyles from './navbar.module.css'
-import { useState } from 'react'
-export default function Navbar({doThing}) {
-    const [query,setQuery] = useState('')
+import { useState, useEffect } from 'react'
+import usePokemonApi from '@/hooks/getPokemon'
+import '@fortawesome/fontawesome-svg-core/styles.css'
+
+export default function Navbar() {
   
     return (
         <nav className={Navstyles.navbar} >
           <div className={Navstyles.searchBar}>
-            <input value={query} onChange={e => setQuery(e.target.value)} type="text" className={Navstyles.searchInput}  />
-            <button onClick={doThing}  className={Navstyles.submitBtn}>Search</button>
+           <Link className={Navstyles.link} href="/">Random Pokemon</Link>
+           <Link className={Navstyles.link} href="/pokemon">Search For Pokemon</Link>
+           <Link className={Navstyles.link} href="/pokemon/favorites">Favorites</Link>
           </div>
     </nav>
     )

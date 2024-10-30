@@ -1,11 +1,14 @@
 "use client";
 import usePokemonApi from "@/hooks/getPokemon";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Card from "@/components/Card/Card";
 import pageStyles from './page.module.css'
 export default function Home() {
   
   const pokeData = usePokemonApi();
+  console.log(pokeData.favoritePokemon)
+
+
   function arrayToString(array) {
     let string = "";
     if (array !== undefined) {
@@ -19,20 +22,24 @@ export default function Home() {
        
       })
     }
-    console.log(string)
     return string;
     
   }
+
+  
   const data = pokeData.randomPokemon
-  console.log(data)
     const cards = data.map(
       (item, index, elements) => {
+        
         return (
           <Card
             name={item.name}
             types={arrayToString(item.types)}
             sprite={item.sprites.front_default}
             key={item.id}
+            id={item.id}
+            favoriteStyle={pokeData.favoriteStyle[item.id]}
+            onClick={() => {pokeData.toggleFavorite(item)}}
           />
         );
     }) 
@@ -44,7 +51,7 @@ export default function Home() {
     }
   }, [pokeData]);
   useEffect(() => {
-    if (pokeData.randomPokemon.length === 0) {
+    if (!pokeData.randomPokemon.length) {
       pokeData.getRandomPokemon();
     }
   }, [pokeData]);

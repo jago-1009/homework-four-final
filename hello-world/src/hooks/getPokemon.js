@@ -7,19 +7,60 @@ export function PokemonProvider({ children }) {
   const [pokemonState, setPokemonState] = useState({
     totalPokemonCount: 0,
     randomPokemon: [],
+    pokemonSearch: {},
+    favoritePokemon: [],
+    favoriteStyle: [],
   });
-  const [pokemonSearch, setPokemonSearch] = useState({});
 
-  /**
-   * Fetches the pokemon api with a limit of 1 to minimize api call time. Uses count returned to determine the total number of pokemon stored on the api.
-   **/
+
+  function toggleFavorite(pokemon) {
+    const newStyle = { ...pokemonState.favoriteStyle };
+    let newFavorite = [...pokemonState.favoritePokemon];
+
+    if (pokemonState.favoriteStyle[pokemon.id] === "#d3d3d3") {
+        // Remove from favorites and update style to black
+        newStyle[pokemon.id] = 'black';
+        newFavorite = updatedFavoritePokemon.filter((item) => item.id !== pokemon.id);
+    } else {
+        // Add to favorites and update style to #d3d3d3
+        newStyle[pokemon.id] = '#d3d3d3';
+        newFavorite = [...newFavorite, pokemon];
+    }
+
+    setPokemonState({
+        ...pokemonState,
+        favoriteStyle: newStyle,
+        favoritePokemon: newFavorite
+    });
+}
+
+  
+  
+  function addtoFavorite(pokemon) {
+    setPokemonState({
+      ...pokemonState,
+      favoritePokemon: [...pokemonState.favoritePokemon, pokemon],
+    })
+  }
+  function removeFavorite(pokemon) {
+    setPokemonState({
+      ...pokemonState,
+      favoritePokemon: pokemonState.favoritePokemon.filter(
+        (item) => item.id !== pokemon.id
+      ),
+    })
+  }
   async function searchPokemon(name) {
     const pokeRequest = await fetch(
       `https://pokeapi.co/api/v2/pokemon/${name}`
-    );
+    )
+    
     if (pokeRequest.ok) {
-      return await pokeRequest.json();
+      const pokeJson = await pokeRequest.json();
+      console.log(pokeJson)
+      setPokemonState({ ...pokemonState, pokemonSearch: pokeJson });
     }
+    ;
   }
   async function getNumberOfPokemon() {
     const pokeRequest = await fetch(
@@ -56,7 +97,11 @@ async function getRandomPokemon(limit = 5) {
     while (pokeIndex < limit) {
       const randId = parseInt(Math.random() * pokemonState.totalPokemonCount);
       if (!pokemonIds[randId]) {
-        const pokeRequest = await getPokemon(randId)
+        let idToUse = randId;
+        if(idToUse > 1000) {
+          idToUse = "10" + String(idToUse).slice(1)
+        }
+        const pokeRequest = await getPokemon(idToUse)
         if (pokeRequest) {
           pokemonIds[randId] = pokeRequest;
           pokeIndex += 1;
@@ -71,7 +116,7 @@ async function getRandomPokemon(limit = 5) {
     });
   }
   // modified
-  const contextValue = { ...pokemonState, getNumberOfPokemon, getRandomPokemon };
+  const contextValue = { ...pokemonState, getNumberOfPokemon, getRandomPokemon, searchPokemon, addtoFavorite, toggleFavorite };
 
   return (
     <PokemonContext.Provider value={contextValue}>
