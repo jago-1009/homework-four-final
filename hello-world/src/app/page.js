@@ -2,7 +2,9 @@
 import usePokemonApi from "@/hooks/getPokemon";
 import { useEffect } from "react";
 import Card from "@/components/Card/Card";
+import pageStyles from './page.module.css'
 export default function Home() {
+  
   const pokeData = usePokemonApi();
   function arrayToString(array) {
     let string = "";
@@ -21,16 +23,21 @@ export default function Home() {
     return string;
     
   }
-  const cards = pokeData.RandomPokemon?.map(
-    (item, index, elements) => {
-      return (
-        <Card
-          name={item.name}
-          types={arrayToString(item.types)}
-          sprite={item.sprites.front_default}
-        />
-      );
-  }) 
+  const data = pokeData.randomPokemon
+  console.log(data)
+    const cards = data.map(
+      (item, index, elements) => {
+        return (
+          <Card
+            name={item.name}
+            types={arrayToString(item.types)}
+            sprite={item.sprites.front_default}
+            key={item.id}
+          />
+        );
+    }) 
+  
+  
   useEffect(() => {
     if (pokeData.totalPokemonCount === 0) {
       pokeData.getNumberOfPokemon();
@@ -44,7 +51,7 @@ export default function Home() {
   return (
     <main>
       
-     {cards}
+     <div className={pageStyles.main}>{cards}</div>
     </main>
   );
 }

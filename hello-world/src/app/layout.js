@@ -1,5 +1,7 @@
+'use client'
 import localFont from "next/font/local";
 import "./globals.css";
+
 import Navbar from "../components/Navbar/Navbar";
 import { PokemonProvider } from "@/hooks/getPokemon";
 
