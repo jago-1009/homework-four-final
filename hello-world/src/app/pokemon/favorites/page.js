@@ -14,7 +14,7 @@ export default function Favorites() {
 
             else {
             return (
-                <Card name={item.name} types={pokeData.arrayToString(item.types)} sprite={item.sprites.front_default} id={item.id} key={item.id} favoriteStyle={item.favoriteStyle} onClick={() => pokeData.toggleFavorite(item)} toggleRedirect={() => {pokeData.toggleRedirect(item.id)}}/>
+                <Card name={item.name} types={pokeData.arrayToString(item.types)} sprite={item.sprites.front_default} id={item.id} key={item.id} favoriteStyle={item.favoriteStyle} onClick={() => pokeData.toggleFavorite(item)} toggleRedirect={item.id}/>
             )
         }
         }

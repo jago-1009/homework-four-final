@@ -1,0 +1,23 @@
+.container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin-top:24px;
+}
+.data {
+    width: 60%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+.sprite {
+    cursor: pointer;
+}
+.moves {
+    list-style: none;
+}

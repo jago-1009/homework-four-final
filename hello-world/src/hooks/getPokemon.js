@@ -10,17 +10,30 @@ export function PokemonProvider({ children }) {
     pokemonSearch: {},
     favoritePokemon: [],
     favoriteStyle: [],
+    eggGroups: [],
   });
   function arrayToString(array) {
     let string = "";
     if (array !== undefined) {
       array.map((item, index, elements) => {
+        if (Object.keys(item)[1] == 'type') {
         if (elements[index + 1] !== undefined) {
-          string += (item.type.name + ", ");
+
+          string += capitalizeFirstLetter(Object.values(item)[1].name) + ", ";
         }
         else {
-          string += (item.type.name)
+          string += capitalizeFirstLetter(item.type.name);
+        }    
+        } 
+        else if (Object.keys(item)[0] == 'ability') {
+          if (elements[index + 1] !== undefined) {
+            string += capitalizeFirstLetter(item.ability.name) + ", ";
+          }
+          else {
+            string += capitalizeFirstLetter(item.ability.name);
+          }
         }
+        
        
       })
     }
@@ -70,6 +83,13 @@ export function PokemonProvider({ children }) {
     }
     ;
   }
+  async function getEggGroups() {
+    const pokeRequest = await fetch(
+      `https://pokeapi.co/api/v2/egg-group/`
+    );
+    const { results } = await pokeRequest.json();
+    setPokemonState({ ...pokemonState, eggGroups: results });
+  }
   async function getNumberOfPokemon() {
     const pokeRequest = await fetch(
       `https://pokeapi.co/api/v2/pokemon/?limit=1`
@@ -100,9 +120,7 @@ async function getPokemon(number) {
   }
   
 }
-async function toggleRedirect(id) {
-  window.location.href="/details?id=" + id
-}
+
 async function getRandomPokemon(limit = 5) {
     if (!pokemonState.totalPokemonCount) return [];
     const pokemonIds = {};
@@ -133,7 +151,7 @@ async function getRandomPokemon(limit = 5) {
     return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 }
   // modified
-  const contextValue = { ...pokemonState, getNumberOfPokemon, getRandomPokemon, searchPokemon, addtoFavorite, toggleFavorite, arrayToString, toggleRedirect, getPokemon, capitalizeFirstLetter };
+  const contextValue = { ...pokemonState, getNumberOfPokemon, getRandomPokemon, searchPokemon, addtoFavorite, toggleFavorite, arrayToString, getPokemon, capitalizeFirstLetter, getEggGroups };
 
   return (
     <PokemonContext.Provider value={contextValue}>

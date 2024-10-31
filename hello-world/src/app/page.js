@@ -25,7 +25,7 @@ export default function Home() {
             id={item.id}
             favoriteStyle={pokeData.favoriteStyle[item.id]}
             onClick={() => {pokeData.toggleFavorite(item)}}
-            toggleRedirect={() => {pokeData.toggleRedirect(item.id)}}
+            toggleRedirect={item.id}
           />
         );
     }) 
@@ -39,6 +39,12 @@ export default function Home() {
   useEffect(() => {
     if (!pokeData.randomPokemon.length) {
       pokeData.getRandomPokemon();
+    }
+  }, [pokeData]);
+  useEffect(() => {
+    if (!pokeData.eggGroups.length) {
+      pokeData.getEggGroups();
+      console.log(pokeData.eggGroups)
     }
   }, [pokeData]);
   return (
