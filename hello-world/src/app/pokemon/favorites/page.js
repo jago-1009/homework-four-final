@@ -8,7 +8,7 @@ export default function Favorites() {
     const cards = data.map(
         (item, index, elements) => {
             if (data.length === 0) 
-                { return <h1>No Favorites</h1>
+                { return <h1 key={index}>No Favorites</h1>
 
                 }
 
