@@ -10,9 +10,11 @@ export default function Pokemon() {
     const [eggGroup, setEggGroup] = useState('monster')
     const [cards,setCard] = useState([])
     const [method, setMethod ] = useState('By Name')
+    const [habitats, setHabitat] = useState('cave')
   const [pokemonGroup, setPokemonGroup] = useState([]);
     const data = pokeData.pokemonSearch
     const eggGroups = pokeData.eggGroups
+    const habitat = pokeData.habitats
     // console.log(eggGroups)
     useEffect(() => {
       if (pokeData.pokemonSearch.length != 0) {
@@ -23,6 +25,12 @@ export default function Pokemon() {
     useEffect(() => {
       if (pokeData.eggGroups.length == 0) {
         pokeData.getEggGroups()
+        
+      }
+    }, []);
+    useEffect(() => {
+      if (pokeData.habitats.length == 0) {
+        pokeData.getHabitats()
         
       }
     }, []);
@@ -53,12 +61,10 @@ export default function Pokemon() {
             const pokemonList = await Promise.all(
               response.map(async (item) => {
                   const pokemon = await pokeData.getPokemon(item.name);
-                  console.log("Fetched Pokémon:", pokemon); // Log each Pokémon fetched
                   return pokemon;
               })
           );
 
-          console.log("Completed fetching all Pokémon:", pokemonList); // Log full list after fetching
         const newCards = pokemonList
         .filter(item => item && item.name)
         .map((item) => (
@@ -115,10 +121,20 @@ export default function Pokemon() {
             {method === 'By Habitat' ? <div className={pokeStyles.searchBar}>
             <label htmlFor ="habitat">Search by Habitat</label>
 
-            <select name='habitat' onChange={(e) => setEggGroup(e.target.value)}>
-                
+            <select name='habitat' value={habitats} onChange={(e) => setHabitat(e.target.value)}>
+              <option value="cave" >cave</option>
+            {
+                  habitat.map((item, index, elements) => {
+                    if (item.name == "cave") {
+                      return 
+                    }
+                    else {
+                    return <option key={index} value={item.name}>{item.name}</option>
+                    }
+                  })
+                }
               </select>
-              <button onClick={() => loadCard(pokeData.pokemonSearch)}>Search</button>
+              <button onClick={() => loadGroup(habitats, pokeData.getHabitat)}>Search</button>
 
             </div> : ""}
             </div>
