@@ -27,6 +27,9 @@ export default function Details({params}) {
         
        
     }, [data])
+    useEffect(() => {
+        console.log("GROUP",pokeData.eggGroup)
+    }, [pokeData.eggGroup])
     async function grabPokemon(id) {
         const request = await pokeData.getPokemon(id)
         .then((response) => {

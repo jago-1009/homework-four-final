@@ -11,6 +11,7 @@ export function PokemonProvider({ children }) {
     favoritePokemon: [],
     favoriteStyle: [],
     eggGroups: [],
+    eggGroup: [],
   });
   function arrayToString(array) {
     let string = "";
@@ -78,7 +79,7 @@ export function PokemonProvider({ children }) {
     
     if (pokeRequest.ok) {
       const pokeJson = await pokeRequest.json();
-      console.log(pokeJson)
+      // console.log(pokeJson)
       setPokemonState({ ...pokemonState, pokemonSearch: pokeJson });
     }
     ;
@@ -89,6 +90,20 @@ export function PokemonProvider({ children }) {
     );
     const { results } = await pokeRequest.json();
     setPokemonState({ ...pokemonState, eggGroups: results });
+  }
+  async function getEggGroup(id) {
+    const dataToSend = id.trim()
+    
+    const pokeRequest = await fetch(
+      `https://pokeapi.co/api/v2/egg-group/${dataToSend}`
+    );
+
+    if (!pokeRequest.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const  group  = await pokeRequest.json();
+    const pokemon = group.pokemon_species
+    setPokemonState({ ...pokemonState, eggGroup: pokemon });
   }
   async function getNumberOfPokemon() {
     const pokeRequest = await fetch(
@@ -151,7 +166,7 @@ async function getRandomPokemon(limit = 5) {
     return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 }
   // modified
-  const contextValue = { ...pokemonState, getNumberOfPokemon, getRandomPokemon, searchPokemon, addtoFavorite, toggleFavorite, arrayToString, getPokemon, capitalizeFirstLetter, getEggGroups };
+  const contextValue = { ...pokemonState, getNumberOfPokemon, getRandomPokemon, searchPokemon, addtoFavorite, toggleFavorite, arrayToString, getPokemon, capitalizeFirstLetter, getEggGroups, getEggGroup };
 
   return (
     <PokemonContext.Provider value={contextValue}>

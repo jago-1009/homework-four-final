@@ -37,3 +37,9 @@
 .searchBar {
     margin-top: 24px;
 }
+.cards {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
