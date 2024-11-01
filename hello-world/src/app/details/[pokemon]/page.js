@@ -24,8 +24,6 @@ export default function Details({params}) {
         if (data) {
             grabPokemon(data)
         }
-        
-       
     }, [data])
     useEffect(() => {
         console.log("GROUP",pokeData.eggGroup)

@@ -12,6 +12,7 @@ export function PokemonProvider({ children }) {
     favoriteStyle: [],
     eggGroups: [],
     eggGroup: [],
+    habitats: [],
   });
   function arrayToString(array) {
     let string = "";
@@ -91,7 +92,17 @@ export function PokemonProvider({ children }) {
     const { results } = await pokeRequest.json();
     setPokemonState({ ...pokemonState, eggGroups: results });
   }
+
+
+  async function getHabitats() {
+    const pokeRequest = await fetch(
+      `https://pokeapi.co/api/v2/pokemon-habitat/`
+    );
+    const { results } = await pokeRequest.json();
+    setPokemonState({ ...pokemonState, habitats: results });
+  }
   async function getEggGroup(id) {
+
     const dataToSend = id.trim()
     
     const pokeRequest = await fetch(
@@ -103,7 +114,22 @@ export function PokemonProvider({ children }) {
     }
     const  group  = await pokeRequest.json();
     const pokemon = group.pokemon_species
-    setPokemonState({ ...pokemonState, eggGroup: pokemon });
+    return pokemon
+  }
+  async function getHabitat(id) {
+
+    const dataToSend = id.trim()
+    
+    const pokeRequest = await fetch(
+      `https://pokeapi.co/api/v2/pokemon-habitat/${dataToSend}`
+    );
+
+    if (!pokeRequest.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const  group  = await pokeRequest.json();
+    const pokemon = group.pokemon_species
+    return pokemon
   }
   async function getNumberOfPokemon() {
     const pokeRequest = await fetch(
@@ -166,7 +192,7 @@ async function getRandomPokemon(limit = 5) {
     return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 }
   // modified
-  const contextValue = { ...pokemonState, getNumberOfPokemon, getRandomPokemon, searchPokemon, addtoFavorite, toggleFavorite, arrayToString, getPokemon, capitalizeFirstLetter, getEggGroups, getEggGroup };
+  const contextValue = { ...pokemonState, getNumberOfPokemon, getRandomPokemon, searchPokemon, addtoFavorite, toggleFavorite, arrayToString, getPokemon, capitalizeFirstLetter, getEggGroups, getEggGroup, getHabitat, getHabitats };
 
   return (
     <PokemonContext.Provider value={contextValue}>

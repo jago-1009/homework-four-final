@@ -43,19 +43,23 @@ export default function Pokemon() {
     
     }
   }
-    async function loadGroup(data) {
+    async function loadGroup(data, method) {
+
       setCard([])
       setPokemonGroup([])
 
-      let response = await pokeData.getEggGroup(data)
-      if (response) {
-        console.log(response)
-         pokeData.eggGroup.map(async (item, index, elements) => {
-         let pokemon = await pokeData.getPokemon(item.name)
-         setPokemonGroup(prevGroup => [...prevGroup, pokemon]);
-       })
-       if (pokemonGroup.length > 0) {
-        const newCards = pokemonGroup
+      let response = await method(data)
+      if (response.length > 0) {
+            const pokemonList = await Promise.all(
+              response.map(async (item) => {
+                  const pokemon = await pokeData.getPokemon(item.name);
+                  console.log("Fetched Pokémon:", pokemon); // Log each Pokémon fetched
+                  return pokemon;
+              })
+          );
+
+          console.log("Completed fetching all Pokémon:", pokemonList); // Log full list after fetching
+        const newCards = pokemonList
         .filter(item => item && item.name)
         .map((item) => (
             <Card
@@ -70,7 +74,7 @@ export default function Pokemon() {
             />
         ));
         setCard(newCards);
-    }
+    
 
         
       
@@ -105,7 +109,7 @@ export default function Pokemon() {
                   })
                 }
               </select>
-              <button onClick={() => loadGroup(eggGroup)}>Search</button>
+              <button onClick={() => loadGroup(eggGroup, pokeData.getEggGroup)}>Search</button>
 
             </div> : ""}
             {method === 'By Habitat' ? <div className={pokeStyles.searchBar}>
