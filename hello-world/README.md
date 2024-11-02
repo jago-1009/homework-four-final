@@ -15,4 +15,4 @@ Shows the details of any of the Pokemon that you click on. Shows Name, Type, Hei
 
 
 ## Vercel Link
-https://homework-four-final-try-2.vercel.app/pokemon/favorites
+https://homework-four-final-try-2.vercel.app/
